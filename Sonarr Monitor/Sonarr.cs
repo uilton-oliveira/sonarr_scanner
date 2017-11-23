@@ -15,6 +15,7 @@ namespace Sonarr_Monitor
     class Sonarr
     {
         public static decimal currentInterval = -1;
+        public static string currentApiKey = null;
         public static async Task<string> Get(string queryString)
         {
             using (var httpClient = new HttpClient())

@@ -104,11 +104,21 @@ namespace Sonarr_Monitor
 
         private void StartSonarrThread()
         {
-            var oldValue = Sonarr.currentInterval;
-            var newValue = Properties.Settings.Default.interval;
-            var changed = Properties.Settings.Default.interval != Sonarr.currentInterval;
-            Debug.WriteLine($"oldValue: {oldValue} / newValue: {newValue} / changed: {changed}");
-            if (changed)
+            if (Properties.Settings.Default.apiKey == null || Properties.Settings.Default.apiKey.Trim() == "")
+            {
+                return;
+            }
+            var oldInterval = Sonarr.currentInterval;
+            var newInterval = Properties.Settings.Default.interval;
+            var changedInterval = Properties.Settings.Default.interval != Sonarr.currentInterval;
+
+            var oldApiKey = Sonarr.currentApiKey;
+            var newApiKey = Properties.Settings.Default.apiKey;
+            var changedApiKey = Properties.Settings.Default.apiKey != Sonarr.currentApiKey;
+
+            Debug.WriteLine($"oldInterval: {oldInterval} / newInterval: {newInterval} / changedInterval: {changedInterval}");
+            Debug.WriteLine($"oldApiKey: {oldApiKey} / newApiKey: {newApiKey} / changedApiKey: {changedApiKey}");
+            if (changedInterval || changedApiKey)
             {
                 if (cancellationTokenSource != null)
                     cancellationTokenSource.Cancel();
@@ -144,6 +154,14 @@ namespace Sonarr_Monitor
                 this.Opacity = 0;
             }
             base.OnLoad(e);
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (AboutBox box = new AboutBox())
+            {
+                box.ShowDialog(this);
+            }
         }
     }
     

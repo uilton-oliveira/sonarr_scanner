@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // As informações gerais sobre um assembly são controladas por
 // conjunto de atributos. Altere estes valores de atributo para modificar as informações
 // associada a um assembly.
-[assembly: AssemblyTitle("Sonarr Downloader")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Sonarr Monitor")]
+[assembly: AssemblyDescription("Keep monitoring the Sonarr wanted list and send an search request to then every X minutes, forcing an Automatic Search instead of relying on RSS based search, this way it will be more suitable to home based systems.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Sonarr Downloader")]
+[assembly: AssemblyCompany("www.uiltonsites.com.br")]
+[assembly: AssemblyProduct("Sonarr Monitor")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("UiltonSites")]
 [assembly: AssemblyCulture("")]
 
 // Definir ComVisible como false torna os tipos neste assembly invisíveis
