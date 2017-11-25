@@ -40,6 +40,12 @@ namespace Sonarr_Monitor
                 this.ShowInTaskbar = true;
                 this.Opacity = 100;
                 this.Show();
+                BeginInvoke(new MethodInvoker(delegate
+                {
+                    this.WindowState = FormWindowState.Normal;
+                    this.BringToFront();
+                }));
+                
             }
             else
             {
@@ -64,8 +70,8 @@ namespace Sonarr_Monitor
                 {
                     alertDisplayed = true;
                     notifyIcon1.ShowBalloonTip(2);
-                    toggleVisible();
                 }
+                toggleVisible();
             }
         }
 
