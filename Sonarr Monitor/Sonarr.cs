@@ -58,7 +58,7 @@ namespace Sonarr_Monitor
             }
         }
 
-        private static async Task FindMissing()
+        public static async Task FindMissing()
         {
             var rawJson = await Get($"/api/wanted/missing?apikey={Properties.Settings.Default.apiKey}");
             dynamic task = JObject.Parse(rawJson);

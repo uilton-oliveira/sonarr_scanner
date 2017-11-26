@@ -1,20 +1,26 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Sonarr_Downloader.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Sonarr_Monitor.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="url" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://localhost:8989</Value>
     </Setting>
     <Setting Name="interval" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">15</Value>
+      <Value Profile="(Default)">30</Value>
     </Setting>
     <Setting Name="apiKey" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="MainWindowPlacement" Type="System.String" Scope="User">
+    <Setting Name="placement" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="visible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="timer" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="wakeSearch" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

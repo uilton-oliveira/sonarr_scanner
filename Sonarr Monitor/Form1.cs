@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +28,8 @@ namespace Sonarr_Monitor
             settings.interval = interval.Value;
             settings.url = url.Text;
             settings.apiKey = apiKey.Text;
+            settings.timer = timer.Checked;
+            settings.wakeSearch = wakeSearch.Checked;
             settings.Save();
             
             StartSonarrThread();
@@ -88,11 +91,24 @@ namespace Sonarr_Monitor
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             var settings = Properties.Settings.Default;
-            settings.MainWindowPlacement = WindowPlacement.GetPlacement(this.Handle);
+            settings.placement = WindowPlacement.GetPlacement(this.Handle);
             settings.visible = this.Visible;
             settings.Save();
 
         }
+
+        private void OnPoweModerChange(object s, PowerModeChangedEventArgs e)
+        {
+            if (Properties.Settings.Default.wakeSearch && e.Mode == PowerModes.Resume)
+            {
+                BeginInvoke(new MethodInvoker(async delegate
+                {
+                    await Sonarr.FindMissing();
+                }));
+                
+            }
+        }
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -100,13 +116,18 @@ namespace Sonarr_Monitor
             interval.Value = settings.interval;
             url.Text = settings.url;
             apiKey.Text = settings.apiKey;
+            timer.Checked = settings.timer;
+            wakeSearch.Checked = settings.wakeSearch;
             BeginInvoke(new MethodInvoker(delegate
             {
                 this.Visible = Properties.Settings.Default.visible;
                 StartSonarrThread();
             }));
+
+            SystemEvents.PowerModeChanged += OnPoweModerChange;
             
         }
+
 
         private void StartSonarrThread()
         {
@@ -114,6 +135,16 @@ namespace Sonarr_Monitor
             {
                 return;
             }
+
+            if (!Properties.Settings.Default.timer)
+            {
+                if (cancellationTokenSource != null)
+                {
+                    cancellationTokenSource.Cancel();
+                }
+                return;
+            }
+
             var oldInterval = Sonarr.currentInterval;
             var newInterval = Properties.Settings.Default.interval;
             var changedInterval = Properties.Settings.Default.interval != Sonarr.currentInterval;
@@ -152,7 +183,7 @@ namespace Sonarr_Monitor
         protected override void OnLoad(EventArgs e)
         {
             var settings = Properties.Settings.Default;
-            WindowPlacement.SetPlacement(this.Handle, settings.MainWindowPlacement);
+            WindowPlacement.SetPlacement(this.Handle, settings.placement);
             if (!settings.visible)
             {
                 this.Visible = false; // Hide form window.

@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.url = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,9 +42,12 @@
             this.interval = new System.Windows.Forms.NumericUpDown();
             this.SaveSettings = new System.Windows.Forms.Button();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.wakeSearch = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.timer = new System.Windows.Forms.CheckBox();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.interval)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -53,20 +57,27 @@
             this.aboutToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(143, 70);
             // 
             // openSettingsToolStripMenuItem
             // 
             this.openSettingsToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.openSettingsToolStripMenuItem.Name = "openSettingsToolStripMenuItem";
-            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openSettingsToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.openSettingsToolStripMenuItem.Text = "Hide / Show";
             this.openSettingsToolStripMenuItem.Click += new System.EventHandler(this.openSettingsToolStripMenuItem_Click);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -106,7 +117,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 117);
+            this.label3.Location = new System.Drawing.Point(6, 16);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(87, 13);
             this.label3.TabIndex = 5;
@@ -114,7 +125,7 @@
             // 
             // interval
             // 
-            this.interval.Location = new System.Drawing.Point(15, 134);
+            this.interval.Location = new System.Drawing.Point(9, 33);
             this.interval.Maximum = new decimal(new int[] {
             1215752192,
             23,
@@ -129,14 +140,14 @@
             this.interval.Size = new System.Drawing.Size(84, 20);
             this.interval.TabIndex = 6;
             this.interval.Value = new decimal(new int[] {
-            15,
+            30,
             0,
             0,
             0});
             // 
             // SaveSettings
             // 
-            this.SaveSettings.Location = new System.Drawing.Point(258, 131);
+            this.SaveSettings.Location = new System.Drawing.Point(258, 174);
             this.SaveSettings.Name = "SaveSettings";
             this.SaveSettings.Size = new System.Drawing.Size(102, 23);
             this.SaveSettings.TabIndex = 7;
@@ -155,21 +166,48 @@
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
             // 
-            // aboutToolStripMenuItem
+            // wakeSearch
             // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.wakeSearch.AutoSize = true;
+            this.wakeSearch.Checked = true;
+            this.wakeSearch.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.wakeSearch.Location = new System.Drawing.Point(256, 108);
+            this.wakeSearch.Name = "wakeSearch";
+            this.wakeSearch.Size = new System.Drawing.Size(104, 17);
+            this.wakeSearch.TabIndex = 8;
+            this.wakeSearch.Text = "Search on wake";
+            this.wakeSearch.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.timer);
+            this.groupBox1.Controls.Add(this.interval);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Location = new System.Drawing.Point(12, 108);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(119, 89);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Timed Search";
+            // 
+            // timer
+            // 
+            this.timer.AutoSize = true;
+            this.timer.Location = new System.Drawing.Point(9, 59);
+            this.timer.Name = "timer";
+            this.timer.Size = new System.Drawing.Size(88, 17);
+            this.timer.TabIndex = 7;
+            this.timer.Text = "Enable Timer";
+            this.timer.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 165);
+            this.ClientSize = new System.Drawing.Size(370, 204);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.wakeSearch);
             this.Controls.Add(this.SaveSettings);
-            this.Controls.Add(this.interval);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.apiKey);
             this.Controls.Add(this.label1);
@@ -184,6 +222,8 @@
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.interval)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -203,6 +243,9 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.CheckBox wakeSearch;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox timer;
     }
 }
 

@@ -37,7 +37,7 @@ namespace Sonarr_Monitor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
         public decimal interval {
             get {
                 return ((decimal)(this["interval"]));
@@ -62,12 +62,12 @@ namespace Sonarr_Monitor.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string MainWindowPlacement {
+        public string placement {
             get {
-                return ((string)(this["MainWindowPlacement"]));
+                return ((string)(this["placement"]));
             }
             set {
-                this["MainWindowPlacement"] = value;
+                this["placement"] = value;
             }
         }
         
@@ -80,6 +80,30 @@ namespace Sonarr_Monitor.Properties {
             }
             set {
                 this["visible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool timer {
+            get {
+                return ((bool)(this["timer"]));
+            }
+            set {
+                this["timer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool wakeSearch {
+            get {
+                return ((bool)(this["wakeSearch"]));
+            }
+            set {
+                this["wakeSearch"] = value;
             }
         }
     }
