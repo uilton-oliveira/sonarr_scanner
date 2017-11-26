@@ -31,8 +31,15 @@ namespace Sonarr_Monitor
             settings.timer = timer.Checked;
             settings.wakeSearch = wakeSearch.Checked;
             settings.Save();
-            
-            StartSonarrThread();
+
+            if (settings.timer)
+            {
+                StartSonarrThread();
+            }
+            else
+            {
+                ManualSearch();
+            }
         }
 
         private void toggleVisible()
@@ -101,12 +108,22 @@ namespace Sonarr_Monitor
         {
             if (Properties.Settings.Default.wakeSearch && e.Mode == PowerModes.Resume)
             {
-                BeginInvoke(new MethodInvoker(async delegate
-                {
-                    await Sonarr.FindMissing();
-                }));
-                
+                ManualSearch();
             }
+            
+        }
+
+        private void ManualSearch()
+        {
+            if (Properties.Settings.Default.apiKey == null || Properties.Settings.Default.apiKey.Trim() == "")
+            {
+                return;
+            }
+            BeginInvoke(new MethodInvoker(async delegate
+            {
+                await Sonarr.FindMissing();
+            }));
+
         }
 
 
@@ -118,11 +135,18 @@ namespace Sonarr_Monitor
             apiKey.Text = settings.apiKey;
             timer.Checked = settings.timer;
             wakeSearch.Checked = settings.wakeSearch;
-            BeginInvoke(new MethodInvoker(delegate
+
+            if (settings.timer)
             {
-                this.Visible = Properties.Settings.Default.visible;
-                StartSonarrThread();
-            }));
+                BeginInvoke(new MethodInvoker(delegate
+                {
+                    this.Visible = Properties.Settings.Default.visible;
+                    StartSonarrThread();
+                }));
+            } else
+            {
+                ManualSearch();
+            }
 
             SystemEvents.PowerModeChanged += OnPoweModerChange;
             
