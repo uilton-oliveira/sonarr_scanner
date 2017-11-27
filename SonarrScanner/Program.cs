@@ -30,7 +30,7 @@ namespace Sonarr_Scanner
                         notificationIcon = new NotifyIcon()
                         {
                             ContextMenu = menu,
-                            Text = "Main"
+                            Text = "Sonarr Scanner"
                         };
                         notificationIcon.Icon = Properties.Resources.icon;
                         mnuExit.Click += new EventHandler(MenuExit_Click);
