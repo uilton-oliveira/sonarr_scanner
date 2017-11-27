@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sonarr Monitor", "Sonarr Monitor\Sonarr Monitor.csproj", "{D2F3AC75-1BC1-4B4A-8483-7BFA66BA9D7E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sonarr Scanner", "SonarrScanner\Sonarr Scanner.csproj", "{2067D20B-6B8B-4469-9830-62508875680D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D2F3AC75-1BC1-4B4A-8483-7BFA66BA9D7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2F3AC75-1BC1-4B4A-8483-7BFA66BA9D7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2F3AC75-1BC1-4B4A-8483-7BFA66BA9D7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2F3AC75-1BC1-4B4A-8483-7BFA66BA9D7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2067D20B-6B8B-4469-9830-62508875680D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2067D20B-6B8B-4469-9830-62508875680D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2067D20B-6B8B-4469-9830-62508875680D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2067D20B-6B8B-4469-9830-62508875680D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {1DF8EAC3-7338-4B0F-BD22-E9253382D9C4}
+		SolutionGuid = {D76ADCAC-0F54-44D9-A4DC-5F2D0ADA7857}
 	EndGlobalSection
 EndGlobal
