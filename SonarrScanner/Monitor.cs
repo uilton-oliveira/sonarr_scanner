@@ -47,7 +47,7 @@ namespace Sonarr_Scanner
                                     Scan();
                                 }
                                 lastCheck = DateTime.UtcNow;
-                                Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
+                                Task.Delay(TimeSpan.FromMinutes(1), cancellationToken).Wait();
                             }
                         }
                     );
@@ -63,7 +63,7 @@ namespace Sonarr_Scanner
                             Console.WriteLine("Timed Scan started.");
                             while (true)
                             {
-                                Task.Delay(TimeSpan.FromMinutes(settings.Interval), cancellationToken);
+                                Task.Delay(TimeSpan.FromMinutes(settings.Interval), cancellationToken).Wait();
                                 Scan();
                             }
                         }
