@@ -78,7 +78,12 @@ namespace Sonarr_Scanner
             }
             if (!anyTrue)
             {
-                Console.WriteLine("All monitors startup failed, make sure that you configured the config file correctly, aborting...");
+                var err = "All monitors startup failed, make sure that you configured the config file (settings_radarr.json and/or settings_sonarr.json) correctly, aborting...";
+                Console.WriteLine(err);
+                if (!Utiliy.IsRunningOnMono())
+                {
+                    MessageBox.Show(err);
+                }
                 Exit();
             }
 
