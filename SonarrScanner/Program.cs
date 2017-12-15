@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -9,7 +10,8 @@ namespace Sonarr_Scanner
     class Program
     {
         private static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        
+        private static List<Monitor> monitors = new List<Monitor>();
+
         static void Main(string[] args)
         {
 
@@ -18,14 +20,19 @@ namespace Sonarr_Scanner
             {
                 Console.WriteLine("Running on .NET");
                 ContextMenu menu;
+                MenuItem mnuScan;
                 MenuItem mnuExit;
                 NotifyIcon notificationIcon;
                 Thread notifyThread = new Thread(
                     delegate ()
                     {
                         menu = new ContextMenu();
+
+                        mnuScan = new MenuItem("Scan");
+                        menu.MenuItems.Add(0, mnuScan);
+
                         mnuExit = new MenuItem("Exit");
-                        menu.MenuItems.Add(0, mnuExit);
+                        menu.MenuItems.Add(1, mnuExit);
 
                         notificationIcon = new NotifyIcon()
                         {
@@ -34,6 +41,7 @@ namespace Sonarr_Scanner
                         };
                         notificationIcon.Icon = Properties.Resources.icon;
                         mnuExit.Click += new EventHandler(MenuExit_Click);
+                        mnuScan.Click += new EventHandler(MenuScan_Click);
 
                         notificationIcon.Visible = true;
                         Application.Run();
@@ -57,14 +65,20 @@ namespace Sonarr_Scanner
 
             Console.WriteLine("Loading settings...");
             Settings.Init();
-            Console.WriteLine("Starting Sonarr Monitor");
-            bool sonarr = new Monitor(Settings.Sonarr, cancellationTokenSource.Token).Init();
-            Console.WriteLine("Starting Radarr Monitor");
-            bool radarr = new Monitor(Settings.Radarr, cancellationTokenSource.Token).Init();
 
-            if (!sonarr && !radarr)
+            monitors.Add(new Monitor(Settings.Sonarr, cancellationTokenSource.Token));
+            monitors.Add(new Monitor(Settings.Radarr, cancellationTokenSource.Token));
+
+            bool anyTrue = false;
+            foreach (Monitor monitor in monitors)
             {
-                Console.WriteLine("Both sonarr and radarr startup failed, aborting...");
+                Console.WriteLine($"Starting {monitor.Settings.Provider()} Monitor");
+                if (monitor.Init())
+                    anyTrue = true;
+            }
+            if (!anyTrue)
+            {
+                Console.WriteLine("All monitors startup failed, make sure that you configured the config file correctly, aborting...");
                 Exit();
             }
 
@@ -76,6 +90,15 @@ namespace Sonarr_Scanner
         private static void MenuExit_Click(object sender, EventArgs e)
         {
             Exit();
+        }
+
+        private static void MenuScan_Click(object sender, EventArgs e)
+        {
+            foreach (Monitor monitor in monitors)
+            {
+                Console.WriteLine($"Running manual scan on {monitor.Settings.Provider()}");
+                monitor.ScanNow();
+            }
         }
 
         private static void Exit()

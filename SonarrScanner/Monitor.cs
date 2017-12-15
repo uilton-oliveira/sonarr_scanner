@@ -12,28 +12,43 @@ namespace Sonarr_Scanner
 {
     class Monitor
     {
-        Settings settings;
+        public readonly Settings Settings;
         CancellationToken cancellationToken;
         DateTime lastCheck = DateTime.UtcNow;
 
         public Monitor(Settings settings, CancellationToken cancellationToken)
         {
-            this.settings = settings;
+            this.Settings = settings;
             this.cancellationToken = cancellationToken;
         }
 
+        public void ScanNow()
+        {
+            if (Settings.APIKey == null || Settings.APIKey.Trim() == "")
+            {
+                return;
+            }
+
+            Thread thread = new Thread(
+                        delegate ()
+                        {
+                            Scan();
+                        }
+                    );
+            thread.Start();
+        }
         public bool Init()
         {
-            if (settings.APIKey == null || settings.APIKey.Trim() == "")
+            if (Settings.APIKey == null || Settings.APIKey.Trim() == "")
             {
-                Console.WriteLine($"APIKey not defined, aborting on {settings.Provider()}, set it on {settings.FileName()}");
+                Console.WriteLine($"APIKey not defined, aborting on {Settings.Provider()}, set it on {Settings.FileName()}");
                 return false;
             }
 
-            Console.WriteLine($"Starting Monitor to {settings.Provider()} on URL: {settings.URL}");
+            Console.WriteLine($"Starting Monitor to {Settings.Provider()} on URL: {Settings.URL}");
 
             // wake up scan
-            if (settings.ScanOnWake)
+            if (Settings.ScanOnWake)
             {
                 Thread thread = new Thread(
                         delegate ()
@@ -55,7 +70,7 @@ namespace Sonarr_Scanner
             }
 
             // timed scan
-            if (settings.ScanOnInterval)
+            if (Settings.ScanOnInterval)
             {
                 Thread thread = new Thread(
                         delegate ()
@@ -63,7 +78,7 @@ namespace Sonarr_Scanner
                             Console.WriteLine("Timed Scan started.");
                             while (true)
                             {
-                                Task.Delay(TimeSpan.FromMinutes(settings.Interval), cancellationToken).Wait();
+                                Task.Delay(TimeSpan.FromMinutes(Settings.Interval), cancellationToken).Wait();
                                 Scan();
                             }
                         }
@@ -72,7 +87,7 @@ namespace Sonarr_Scanner
             }
 
             // startup scan
-            if (settings.ScanOnStart)
+            if (Settings.ScanOnStart)
             {
                 Thread thread = new Thread(
                         delegate ()
@@ -84,19 +99,19 @@ namespace Sonarr_Scanner
                 thread.Start();
             }
 
-            return settings.ScanOnWake || settings.ScanOnInterval;
+            return Settings.ScanOnWake || Settings.ScanOnInterval;
         }
 
         private void Scan()
         {
-            var rawJson = Get($"/api/wanted/missing?pageSize=50&apikey={settings.APIKey}");
-            Console.WriteLine($"{settings.Provider()} GET Result: {rawJson}");
+            var rawJson = Get($"/api/wanted/missing?pageSize=50&apikey={Settings.APIKey}");
+            Console.WriteLine($"{Settings.Provider()} GET Result: {rawJson}");
             dynamic task = JObject.Parse(rawJson);
 
             List<dynamic> searchIds = new List<dynamic>();
             foreach (dynamic record in task.records)
             {
-                if (settings.Provider() == Settings.NAME_SONARR)
+                if (Settings.Provider() == Settings.NAME_SONARR)
                     Debug.WriteLine($"EP ID: {record.id} / Name: {record.series.title} / Season: {record.seasonNumber} / Episode: {record.episodeNumber}");
                 else
                     Debug.WriteLine($"Movie ID: {record.id} / Name: {record.title} / Year: {record.year} / Status: {record.status}");
@@ -104,7 +119,7 @@ namespace Sonarr_Scanner
             }
 
             dynamic dyn = new ExpandoObject();
-            if (settings.Provider() == Settings.NAME_SONARR)
+            if (Settings.Provider() == Settings.NAME_SONARR)
             {
                 dyn.episodeIds = searchIds;
                 dyn.name = "EpisodeSearch";
@@ -116,9 +131,9 @@ namespace Sonarr_Scanner
             }
             string postJson = JsonConvert.SerializeObject(dyn);
 
-            Debug.WriteLine($"Sending {settings.Provider()} POST: {postJson}");
-            string commandOutput = Post($"/api/command?apikey={settings.APIKey}", postJson);
-            Console.WriteLine($"{settings.Provider()} POST Result: {commandOutput}");
+            Debug.WriteLine($"Sending {Settings.Provider()} POST: {postJson}");
+            string commandOutput = Post($"/api/command?apikey={Settings.APIKey}", postJson);
+            Console.WriteLine($"{Settings.Provider()} POST Result: {commandOutput}");
         }
 
         private string Get(string queryString)
@@ -128,7 +143,7 @@ namespace Sonarr_Scanner
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var url = $"{settings.URL}{queryString}";
+                    var url = $"{Settings.URL}{queryString}";
                     Console.WriteLine($"Running GET: {url}");
                     // The actual Get method
                     return httpClient.GetAsync($"{url}").Result.Content.ReadAsStringAsync().Result;
@@ -151,7 +166,7 @@ namespace Sonarr_Scanner
                     using (var content = new StringContent(postData))
                     {
                         // The actual Post method
-                        var url = $"{settings.URL}{queryString}";
+                        var url = $"{Settings.URL}{queryString}";
                         Console.WriteLine($"Running POST: {url}");
                         return httpClient.PostAsync($"{url}", content).Result.Content.ReadAsStringAsync().Result;
 
