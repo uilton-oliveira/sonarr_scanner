@@ -29,7 +29,7 @@ namespace Sonarr_Scanner
                 return;
             }
 
-            Thread thread = new Thread(
+            var thread = new Thread(
                         delegate ()
                         {
                             Scan();
@@ -50,7 +50,7 @@ namespace Sonarr_Scanner
             // wake up scan
             if (Settings.ScanOnWake)
             {
-                Thread thread = new Thread(
+                var thread = new Thread(
                         delegate ()
                         {
                             Console.WriteLine("Wake UP Scan started.");
@@ -72,34 +72,112 @@ namespace Sonarr_Scanner
             // timed scan
             if (Settings.ScanOnInterval)
             {
-                Thread thread = new Thread(
-                        delegate ()
+                var thread = new Thread(
+                    delegate ()
+                    {
+                        Console.WriteLine("Timed Scan started.");
+                        while (true)
                         {
-                            Console.WriteLine("Timed Scan started.");
-                            while (true)
-                            {
-                                Task.Delay(TimeSpan.FromMinutes(Settings.Interval), cancellationToken).Wait();
-                                Scan();
-                            }
+                            Task.Delay(TimeSpan.FromMinutes(Settings.Interval), cancellationToken).Wait();
+                            Scan();
                         }
-                    );
+                    }
+                );
+                thread.Start();
+            }
+            
+            // timed force import scan
+            if (Settings.ForceImport)
+            {
+                var thread = new Thread(
+                    delegate ()
+                    {
+                        Console.WriteLine("Force Import started.");
+                        while (true)
+                        {
+                            Task.Delay(TimeSpan.FromMinutes(Settings.ForceImportInterval), cancellationToken).Wait();
+                            ForceImport();
+                        }
+                    }
+                );
                 thread.Start();
             }
 
             // startup scan
             if (Settings.ScanOnStart)
             {
-                Thread thread = new Thread(
+                var thread = new Thread(
                         delegate ()
                         {
                             Console.WriteLine("Startup Scan started.");
                             Scan();
+                            ForceImport();
                         }
                     );
                 thread.Start();
             }
 
             return Settings.ScanOnWake || Settings.ScanOnInterval;
+        }
+
+        private void ForceImport()
+        {
+            if (Settings.Provider() == Settings.NAME_RADAR) { return;} // not implemented yet to radarr
+            
+            var rawJson = Get($"/api/queue?sort_by=timeleft&order=asc&apikey={Settings.APIKey}");
+            dynamic queues = JArray.Parse(rawJson);
+            foreach (dynamic queue in queues)
+            {
+                if (queue.trackedDownloadStatus != "Warning") {continue;}
+
+                
+                Debug.WriteLine($"ForceImport title: {queue.series.title} / status: {queue.trackedDownloadStatus}");
+                
+                var downloadId = queue.downloadId;
+                var episodeId = queue.episode.id;
+                var serieId = queue.episode.seriesId;
+
+                var manualimportJson = Get($"/api/manualimport?downloadId={downloadId}&sort_by=qualityWeight&order=desc&apikey={Settings.APIKey}");
+                dynamic manualimports = JArray.Parse(manualimportJson);
+                foreach (dynamic manual in manualimports)
+                {
+                    var rejectedPermanently = false;
+                    foreach (dynamic rejection in manual.rejections)
+                    {
+                        Debug.WriteLine($"Rejection reason: \"{rejection.reason}\" / type: {rejection.type}");
+                        if (rejection.type == "permanent")
+                        {
+                            rejectedPermanently = true;
+                        }
+                    }
+
+                    if (!rejectedPermanently) {continue;}
+                    var path = manual.path;
+                    var files = new List<dynamic>();
+
+                    dynamic file = new ExpandoObject();
+                    file.path = path;
+                    file.seriesId = serieId;
+                    file.episodeIds = new List<dynamic> {episodeId};
+                    file.quality = queue.quality;
+                    file.downloadId = downloadId;
+                    
+                    files.Add(file);
+                    
+                    dynamic dyn = new ExpandoObject();
+                    dyn.importMode = Settings.ForceImportMode;
+                    dyn.name = "manualImport";
+                    dyn.files = files;
+                    
+                    string postJson = JsonConvert.SerializeObject(dyn);
+
+                    Debug.WriteLine($"Sending {Settings.Provider()} POST: {postJson}");
+                    var commandOutput = Post($"/api/command?apikey={Settings.APIKey}", postJson);
+                    Console.WriteLine($"{Settings.Provider()} POST Result: {commandOutput}");
+                    
+                }
+
+            }
         }
 
         private void Scan()

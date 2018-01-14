@@ -12,7 +12,7 @@ namespace Sonarr_Scanner
         private static CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private static List<Monitor> monitors = new List<Monitor>();
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
 
             Console.WriteLine("Sonarr Scanner starting...");
@@ -69,8 +69,8 @@ namespace Sonarr_Scanner
             monitors.Add(new Monitor(Settings.Sonarr, cancellationTokenSource.Token));
             monitors.Add(new Monitor(Settings.Radarr, cancellationTokenSource.Token));
 
-            bool anyTrue = false;
-            foreach (Monitor monitor in monitors)
+            var anyTrue = false;
+            foreach (var monitor in monitors)
             {
                 Console.WriteLine($"Starting {monitor.Settings.Provider()} Monitor");
                 if (monitor.Init())
@@ -99,7 +99,7 @@ namespace Sonarr_Scanner
 
         private static void MenuScan_Click(object sender, EventArgs e)
         {
-            foreach (Monitor monitor in monitors)
+            foreach (var monitor in monitors)
             {
                 Console.WriteLine($"Running manual scan on {monitor.Settings.Provider()}");
                 monitor.ScanNow();

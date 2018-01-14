@@ -13,6 +13,9 @@ namespace Sonarr_Scanner
         public bool ScanOnWake = true;
         public bool ScanOnInterval = false;
         public bool ScanOnStart = true;
+        public bool ForceImport = false;
+        public int ForceImportInterval = 1;
+        public String ForceImportMode = "Copy"; // Copy or Move
         public string APIKey = "";
         private string filePath;
         private string fileName;
