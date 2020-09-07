@@ -1,6 +1,6 @@
 {
   "URL": "http://localhost:8989",
-  "Interval": 30,
+  "Interval": 120,
   "ScanOnWake": true,
   "ScanOnInterval": false,
   "ScanOnStart": true,  

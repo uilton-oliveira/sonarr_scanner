@@ -11,11 +11,36 @@ The software was completly rewritten to .NET Core (cross platform)
 
 To start using it, you just need to configure **'settings_sonarr.json'** and/or **'settings_radarr.json'**, make sure to put the correect API Key.  
 
-Examples are provided as **'settings_sonarr.json.sample'** / **'settings_radarr.json.sample'**.
+### settings_sonarr.json
+```
+{
+  "URL": "http://localhost:8989",
+  "Interval": 120,
+  "ScanOnWake": true,
+  "ScanOnInterval": false,
+  "ScanOnStart": true,  
+  "ForceImport": false,
+  "ForceImportInterval": 1,
+  "ForceImportMode": "Copy",
+  "APIKey": ""
+}
+```
+_Valid options for **ForceImportMode**: "Copy" or "Move"_
 
-If the setting **'ScanOnStart'** is **true**, and both **'ScanOnWake'** and **'ScanOnInterval'** is **false**, it will start, scan and exit the app, otherwise it will stay open.
+### settings_radarr.json
+```
+{
+  "URL": "http://localhost:7878",
+  "Interval": 1440,
+  "ScanOnWake": true,
+  "ScanOnInterval": false,
+  "ScanOnStart": true,
+  "APIKey": ""
+}
+```
+_All the interval properties are in minutes._
 
-All the interval properties is in minutes.
+If the setting **'ScanOnStart'** is **true**, and both **'ScanOnWake'** and **'ScanOnInterval'** are **false**, it will start, scan and exit the app, otherwise it will stay open.
 
 ## Running on Docker
 You can omit sonarr or radarr and use only one of then if you wish.

@@ -1,8 +1,8 @@
 {
   "URL": "http://localhost:7878",
-  "Interval": 30,
+  "Interval": 1440,
   "ScanOnWake": true,
   "ScanOnInterval": false,
-  "ScanOnStart": true
+  "ScanOnStart": true,
   "APIKey": ""
 }
