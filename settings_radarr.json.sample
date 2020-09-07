@@ -3,9 +3,6 @@
   "Interval": 30,
   "ScanOnWake": true,
   "ScanOnInterval": false,
-  "ScanOnStart": true,
-  "ForceImport": false,
-  "ForceImportInterval": 1,
-  "ForceImportMode": "Copy",
+  "ScanOnStart": true
   "APIKey": ""
 }

@@ -111,13 +111,14 @@ namespace sonarr_scanner
                         {
                             Console.WriteLine("Startup Scan started.");
                             Scan();
-                            ForceImport();
+                            if (Settings.ForceImport)
+                                ForceImport();
                         }
                     );
                 thread.Start();
             }
 
-            return Settings.ScanOnWake || Settings.ScanOnInterval;
+            return Settings.ScanOnWake || Settings.ScanOnInterval || Settings.ScanOnStart;
         }
 
         private void ForceImport()

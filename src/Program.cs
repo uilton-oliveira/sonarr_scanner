@@ -40,9 +40,6 @@ namespace sonarr_scanner
                 Exit();
             }
 
-            Task.Delay(TimeSpan.FromMinutes(1), cancellationTokenSource.Token);
-
-
         }
 
         private static void Exit()
