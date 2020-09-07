@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace Sonarr_Scanner
+namespace sonarr_scanner
 {
     public class Settings
     {
@@ -54,8 +54,6 @@ namespace Sonarr_Scanner
             Load();
             
             URL = URL ?? (name == NAME_SONARR ? "http://localhost:8989" : "http://localhost:7878");
-
-            Save();
         }
 
 
@@ -71,7 +69,7 @@ namespace Sonarr_Scanner
             {
                 JsonConvert.PopulateObject(File.ReadAllText(filePath), this);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Console.WriteLine($"Config file not found to {name}");
             }

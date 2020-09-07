@@ -1,0 +1,14 @@
+{
+  "URL": "http://localhost:8989",
+  "Interval": 30,
+  "ScanOnWake": true,
+  "ScanOnInterval": false,
+  "ScanOnStart": true,  "Interval": 30,
+  "ScanOnWake": true,
+  "ScanOnInterval": false,
+  "ScanOnStart": true,
+  "ForceImport": false,
+  "ForceImportInterval": 1,
+  "ForceImportMode": "Copy",
+  "APIKey": ""
+}
