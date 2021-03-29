@@ -65,13 +65,16 @@ jobs:
       with:
         name: win_x64
         path: dist/win_x64
-        retention-days: 1
     
     - name: Build Changelog
       id: github_release
       uses: mikepenz/release-changelog-builder-action@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d_%H-%M')"
         
     - name: Release
       uses: softprops/action-gh-release@v1
@@ -79,6 +82,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         body: ${{ steps.github_release.outputs.changelog }}
+        tag_name: ${{ steps.date.outputs.date }}
         files: |
           dist/win_x64
           dist/linux_x64
