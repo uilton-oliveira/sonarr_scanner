@@ -16,9 +16,12 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.x
+        
     - name: Restore dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
+      
+    - name: Build Windows
+      run: dotnet publish --no-restore -c Release -r win10-x64 -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true
+    
     - name: ls
-      run: ls -ltrha
+      run: ls -ltrha /bin/Release/net5.0/win10-x64/publish
