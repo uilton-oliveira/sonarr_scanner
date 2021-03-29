@@ -6,8 +6,35 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-win_x64:
+  build-docker:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build and push image amd64 and arm64
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+        
+        
+  build-win_x64:
     runs-on: windows-latest
 
     steps:
@@ -34,7 +61,6 @@ jobs:
         name: win_x64
         path: .\dist\win_x64
         retention-days: 1
-        
         
   build-linux_x64:
     runs-on: ubuntu-latest
@@ -94,6 +120,7 @@ jobs:
         files: |
           dist/linux_x64.zip
           dist/win_x64.zip
-      
+    
+    
       
       
