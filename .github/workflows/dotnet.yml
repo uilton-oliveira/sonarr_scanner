@@ -116,7 +116,6 @@ jobs:
       uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SHA8: ${GITHUB_SHA::8}
       with:
         body: ${{ steps.github_release.outputs.changelog }}
         tag_name: v${{ steps.date.outputs.date }}-${{ steps.slug.outputs.sha8 }}
