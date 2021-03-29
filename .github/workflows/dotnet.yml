@@ -21,7 +21,7 @@ jobs:
       run: dotnet restore
       
     - name: Build Windows
-      run: dotnet publish --no-restore -c Release -r win10-x64 -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true
+      run: dotnet publish -c Release -r win10-x64 -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true
     
     - name: ls
       run: ls -ltrha /bin/Release/net5.0/win10-x64/publish
