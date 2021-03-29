@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-win_x64:
 
     runs-on: windows-latest
 
@@ -21,7 +21,67 @@ jobs:
       run: dotnet restore
       
     - name: Build Windows
-      run: dotnet publish -c Release -r win10-x64 -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true
+      run: dotnet publish -c Release -r win10-x64 -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true --output .\dist\win_x64
     
-    - name: ls
-      run: ls -ltrha /bin/Release/net5.0/win10-x64/publish
+    - name: Prepare
+      run: |
+        cp .\settings_radarr.json.sample .\dist\win_x64\settings_radarr.json
+        cp .\settings_sonarr.json.sample .\dist\win_x64\settings_sonarr.json
+    
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: win_x64
+        path: .\dist\win_x64
+        retention-days: 1
+        
+        
+  build-linux_x64:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          fetch-depth: 0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build Windows
+      run: dotnet publish -c Release -r linux-x64 -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true --output ./dist/linux_x64
+        
+    - name: Prepare
+      run: |
+        cp ./settings_radarr.json.sample ./dist/linux_x64/settings_radarr.json
+        cp ./settings_sonarr.json.sample ./dist/linux_x64/settings_sonarr.json
+    
+    - name: 'Download Windows Artifact'
+      uses: actions/download-artifact@v2
+      with:
+        name: win_x64
+        path: dist/win_x64
+        retention-days: 1
+    
+    - name: Build Changelog
+      id: github_release
+      uses: mikepenz/release-changelog-builder-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        body: ${{ steps.github_release.outputs.changelog }}
+        files: |
+          dist/win_x64
+          dist/linux_x64
+      
+      
+      
