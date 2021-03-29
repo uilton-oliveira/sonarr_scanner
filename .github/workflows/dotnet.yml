@@ -37,8 +37,8 @@ jobs:
         
         
   build-linux_x64:
-
     runs-on: ubuntu-latest
+    needs: [build-win_x64]
 
     steps:
     - uses: actions/checkout@v2
