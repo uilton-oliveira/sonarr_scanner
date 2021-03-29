@@ -48,5 +48,5 @@ You can omit sonarr or radarr and use only one of then if you wish.
 docker run -it --rm \
 -v /path/to/settings_sonarr.json:/app/settings_sonarr.json:ro \
 -v /path/to/settings_radarr.json:/app/settings_radarr.json:ro \
-uilton/sonarr_scanner:latest
+ghcr.io/darksupremo/sonarr_scanner:latest
 ```
