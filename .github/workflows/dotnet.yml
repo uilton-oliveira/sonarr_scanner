@@ -4,9 +4,6 @@ on:
   push:
     branches: [ master ]
   workflow_dispatch:
-
-env:
-  IMAGE_NAME: darksupremo/sonarr_scanner
   
 jobs:
   build-docker:
@@ -34,7 +31,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ env.IMAGE_NAME }}:latest
+            ghcr.io/${{ github.repository }}:latest
         
         
   build-win_x64:
