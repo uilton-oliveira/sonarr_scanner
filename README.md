@@ -7,7 +7,7 @@ Keep monitoring the Sonarr and Radarr wanted list and send an search request to 
 
 The software was completly rewritten to .NET Core (cross platform)
 
-## Settings
+## Settings 
 
 To start using it, you just need to configure **'settings_sonarr.json'** and/or **'settings_radarr.json'**, make sure to put the correect API Key.  
 
