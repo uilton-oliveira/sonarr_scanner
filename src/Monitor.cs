@@ -197,7 +197,7 @@ namespace sonarr_scanner
             }
             string postJson = JsonConvert.SerializeObject(dyn);
             
-            Debug.WriteLine($"Sending {Settings.Provider()} POST: {postJson}");
+            Console.WriteLine($"Sending {Settings.Provider()} POST: {postJson}");
             string commandOutput = Post(apiUrl, postJson);
             Console.WriteLine($"{Settings.Provider()} POST Result: {commandOutput}");
         }
