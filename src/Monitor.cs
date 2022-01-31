@@ -183,35 +183,20 @@ namespace sonarr_scanner
 
         private void Scan()
         {
-            var rawJson = Get($"/api/wanted/missing?pageSize=50&apikey={Settings.APIKey}");
-            if (String.IsNullOrEmpty(rawJson)) {
-                Console.WriteLine($"{Settings.Provider()} GET returned null or empty, skipping...");
+            if (Settings.Provider() == Settings.NAME_RADAR)
+            {
+                dynamic dyn = new ExpandoObject();
+                dyn.name = "MissingMoviesSearch";
+                string postJson = JsonConvert.SerializeObject(dyn);
+
+                Debug.WriteLine($"Sending {Settings.Provider()} POST: {postJson}");
+                string commandOutput = Post($"/api/v3/command?apikey={Settings.APIKey}", postJson);
+                Console.WriteLine($"{Settings.Provider()} POST Result: {commandOutput}");
                 return;
             }
-            Console.WriteLine($"{Settings.Provider()} GET sent");
-            dynamic task = JObject.Parse(rawJson);
-
-            List<dynamic> searchIds = new List<dynamic>();
-            foreach (dynamic record in task.records)
-            {
-                if (Settings.Provider() == Settings.NAME_SONARR)
-                    Debug.WriteLine($"EP ID: {record.id} / Name: {record.series.title} / Season: {record.seasonNumber} / Episode: {record.episodeNumber}");
-                else
-                    Debug.WriteLine($"Movie ID: {record.id} / Name: {record.title} / Year: {record.year} / Status: {record.status}");
-                searchIds.Add(record.id);
-            }
-
+            
             dynamic dyn = new ExpandoObject();
-            if (Settings.Provider() == Settings.NAME_SONARR)
-            {
-                dyn.episodeIds = searchIds;
-                dyn.name = "EpisodeSearch";
-            }
-            else
-            {
-                dyn.movieIds = searchIds;
-                dyn.name = "MoviesSearch";
-            }
+            dyn.name = "missingEpisodeSearch";
             string postJson = JsonConvert.SerializeObject(dyn);
 
             Debug.WriteLine($"Sending {Settings.Provider()} POST: {postJson}");
