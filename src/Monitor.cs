@@ -228,7 +228,7 @@ namespace sonarr_scanner
                 using (var httpClient = new HttpClient())
                 {
 
-                    using (var content = new StringContent(postData))
+                    using (var content = new StringContent(postData, Encoding.UTF8, "application/json"))
                     {
                         // The actual Post method
                         var url = $"{Settings.URL}{queryString}";
