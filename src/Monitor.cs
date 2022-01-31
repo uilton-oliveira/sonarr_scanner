@@ -187,7 +187,7 @@ namespace sonarr_scanner
             if (String.IsNullOrEmpty(rawJson)) {
                 Console.WriteLine($"{Settings.Provider()} GET returned null or empty, skipping...");
                 return;
-            })
+            }
             Console.WriteLine($"{Settings.Provider()} GET sent");
             dynamic task = JObject.Parse(rawJson);
 
