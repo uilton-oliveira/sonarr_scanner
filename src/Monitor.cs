@@ -184,7 +184,11 @@ namespace sonarr_scanner
         private void Scan()
         {
             var rawJson = Get($"/api/wanted/missing?pageSize=50&apikey={Settings.APIKey}");
-            Console.WriteLine($"{Settings.Provider()} GET Result: {rawJson}");
+            if (String.IsNullOrEmpty(rawJson) {
+                Console.WriteLine($"{Settings.Provider()} GET returned null or empty, skipping...");
+                return;
+            })
+            Console.WriteLine($"{Settings.Provider()} GET sent");
             dynamic task = JObject.Parse(rawJson);
 
             List<dynamic> searchIds = new List<dynamic>();
