@@ -183,30 +183,27 @@ namespace sonarr_scanner
 
         private void Scan()
         {
-            if (Settings.Provider() == Settings.NAME_RADAR)
-            {
-                dynamic dyn = new ExpandoObject();
-                dyn.name = "MissingMoviesSearch";
-                string postJson = JsonConvert.SerializeObject(dyn);
-
-                Debug.WriteLine($"Sending {Settings.Provider()} POST: {postJson}");
-                string commandOutput = Post($"/api/v3/command?apikey={Settings.APIKey}", postJson);
-                Console.WriteLine($"{Settings.Provider()} POST Result: {commandOutput}");
-                return;
-            }
-            
             dynamic dyn = new ExpandoObject();
-            dyn.name = "missingEpisodeSearch";
+            string apiUrl = "";
+            if (Settings.Provider() == Settings.NAME_SONARR)
+            {
+                dyn.name = "missingEpisodeSearch";
+                apiUrl = $"/api/command?apikey={Settings.APIKey}";
+            }
+            else
+            {
+                dyn.name = "MissingMoviesSearch";
+                apiUrl = $"/api/v3/command?apikey={Settings.APIKey}";
+            }
             string postJson = JsonConvert.SerializeObject(dyn);
-
+            
             Debug.WriteLine($"Sending {Settings.Provider()} POST: {postJson}");
-            string commandOutput = Post($"/api/command?apikey={Settings.APIKey}", postJson);
+            string commandOutput = Post(apiUrl, postJson);
             Console.WriteLine($"{Settings.Provider()} POST Result: {commandOutput}");
         }
 
         private string Get(string queryString)
         {
-
             try
             {
                 using (var httpClient = new HttpClient())
