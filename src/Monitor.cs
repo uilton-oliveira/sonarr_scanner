@@ -184,7 +184,7 @@ namespace sonarr_scanner
         private void Scan()
         {
             var rawJson = Get($"/api/wanted/missing?pageSize=50&apikey={Settings.APIKey}");
-            if (String.IsNullOrEmpty(rawJson) {
+            if (String.IsNullOrEmpty(rawJson)) {
                 Console.WriteLine($"{Settings.Provider()} GET returned null or empty, skipping...");
                 return;
             })
