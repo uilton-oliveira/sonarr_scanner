@@ -82,7 +82,7 @@ jobs:
       run: dotnet publish -c Release -r linux-x64 -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true --output ./dist/linux_x64
         
     - name: 'Download Windows Artifact'
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: win_x64
         path: dist/win_x64
