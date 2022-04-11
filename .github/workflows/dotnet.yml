@@ -56,7 +56,7 @@ jobs:
         cp .\settings_sonarr.json.sample .\dist\win_x64\settings_sonarr.json
     
     - name: 'Upload Artifact'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: win_x64
         path: .\dist\win_x64
