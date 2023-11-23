@@ -126,7 +126,7 @@ namespace sonarr_scanner
         {
             if (Settings.Provider() == Settings.NAME_RADAR) { return;} // not implemented yet to radarr
             
-            var rawJson = Get($"/api/queue?sort_by=timeleft&order=asc&apikey={Settings.APIKey}");
+            var rawJson = Get($"/api/v3/queue?sort_by=timeleft&order=asc&apikey={Settings.APIKey}");
             dynamic queues = JArray.Parse(rawJson);
             foreach (dynamic queue in queues)
             {
@@ -139,7 +139,7 @@ namespace sonarr_scanner
                 var episodeId = queue.episode.id;
                 var serieId = queue.episode.seriesId;
 
-                var manualimportJson = Get($"/api/manualimport?downloadId={downloadId}&sort_by=qualityWeight&order=desc&apikey={Settings.APIKey}");
+                var manualimportJson = Get($"/api/v3/manualimport?downloadId={downloadId}&sort_by=qualityWeight&order=desc&apikey={Settings.APIKey}");
                 dynamic manualimports = JArray.Parse(manualimportJson);
                 foreach (dynamic manual in manualimports)
                 {
@@ -174,7 +174,7 @@ namespace sonarr_scanner
                     string postJson = JsonConvert.SerializeObject(dyn);
 
                     Debug.WriteLine($"Sending {Settings.Provider()} POST: {postJson}");
-                    var commandOutput = Post($"/api/command?apikey={Settings.APIKey}", postJson);
+                    var commandOutput = Post($"/api/v3/command?apikey={Settings.APIKey}", postJson);
                     Console.WriteLine($"{Settings.Provider()} POST Result: {commandOutput}");
                     
                 }
@@ -189,7 +189,7 @@ namespace sonarr_scanner
             if (Settings.Provider() == Settings.NAME_SONARR)
             {
                 dyn.name = "missingEpisodeSearch";
-                apiUrl = $"/api/command?apikey={Settings.APIKey}";
+                apiUrl = $"/api/v3/command?apikey={Settings.APIKey}";
             }
             else
             {
